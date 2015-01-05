@@ -30,7 +30,7 @@ pub trait PluginFor<E, R = Self>: Assoc<R> {
 /// Defines an interface that extensible types must implement.
 ///
 /// Extensible types must contain a TypeMap.
-pub trait Extensible {
+pub trait Extensible: Sized {
     /// Get a reference to the type's extension storage.
     fn extensions(&self) -> &TypeMap;
 
@@ -104,7 +104,7 @@ pub trait GetCached<R: Clone + 'static>: Extensible {
 }
 
 /// An interface for using plugins with non-extensible types.
-pub trait Get<R> {
+pub trait Get<R>: Sized {
     /// Create and evaluate a once-off instance of a plugin.
     fn compute<P: PluginFor<Self, R> + Assoc<R>>(&mut self) -> Option<R> {
         PluginFor::eval(self, Phantom::<P>)
@@ -140,7 +140,7 @@ mod test {
 
     macro_rules! generate_simple_plugin (
         ($t:ty, $v:ident, $v2:expr) => {
-            #[deriving(PartialEq, Show, Clone)]
+            #[derive(PartialEq, Show, Clone)]
             struct $v(uint);
 
             impl Assoc<$t> for $t {}

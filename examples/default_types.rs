@@ -17,7 +17,7 @@ impl Extensible for Struct {
     }
 }
 
-#[deriving(Clone, Show)]
+#[derive(Clone, Show)]
 struct Plugin {
     field: i32
 }
